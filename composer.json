@@ -1,0 +1,15 @@
+{
+    "name": "pear/xml_rpc2",
+    "type": "library",
+    "description": "XML-RPC client/server library",
+    "keywords": ["xmlrpc","pear"],
+    "homepage": "http://github.com/pear/XML_RPC2",
+    "license": "PHP License 3.02",
+    "authors": [
+        {
+            "name": "Sergio Carvalho",
+            "email": "sergiosgc@php.net",
+            "role": "Lead"
+        }
+    ]
+}
