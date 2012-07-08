@@ -11,5 +11,9 @@
             "email": "sergiosgc@php.net",
             "role": "Lead"
         }
-    ]
+    ],
+    "autoload": {
+        "psr-0": { "XML_RPC2": "" }
+    },
+    "include-path": [""]
 }
