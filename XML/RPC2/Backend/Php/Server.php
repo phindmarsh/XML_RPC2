@@ -79,7 +79,9 @@ class XML_RPC2_Backend_Php_Server extends XML_RPC2_Server
     function __construct($callHandler, $options = array())
     {
         parent::__construct($callHandler, $options);
-        if ($this->encoding != 'utf-8') throw new XML_RPC2_Exception('XML_RPC2_Backend_Php does not support any encoding other than utf-8, due to a simplexml limitation');
+        if (strtolower($this->encoding) != 'utf-8') {
+            throw new XML_RPC2_Exception('XML_RPC2_Backend_Php does not support any encoding other than utf-8, due to a simplexml limitation');
+        }
     }
     
     // }}}
@@ -95,7 +97,7 @@ class XML_RPC2_Backend_Php_Server extends XML_RPC2_Server
             $this->autoDocument();
         } else {
             $response = $this->getResponse();
-            header('Content-type: text/xml; charset=' . $this->encoding);
+            header('Content-type: text/xml; charset=' . strtolower($this->encoding));
             header('Content-length: ' . $this->getContentLength($response));
             print $response;
         }
@@ -134,8 +136,12 @@ class XML_RPC2_Backend_Php_Server extends XML_RPC2_Server
         } catch (XML_RPC2_FaultException $e) {
             return (XML_RPC2_Backend_Php_Response::encodeFault($e->getFaultCode(), $e->getMessage(), $this->encoding));
         } catch (Exception $e) {
-            return (XML_RPC2_Backend_Php_Response::encodeFault(1, 'Unhandled ' . get_class($e) . ' exception:' . $e->getMessage() . $e->getTraceAsString(), $this->encoding));
-        }        
+            if (ini_get('display_errors') == 1) {
+                return (XML_RPC2_Backend_Php_Response::encodeFault(1, 'Unhandled ' . get_class($e) . ' exception:' . $e->getMessage() . $e->getTraceAsString(), $this->encoding));
+            } else {
+                return XML_RPC2_Backend_Php_Response::encodeFault(1, 'Unhandled PHP Exception', $this->encoding);
+            }
+        }
     }
     
 }
